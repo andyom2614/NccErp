@@ -208,7 +208,7 @@ The reporting time and date is:
   })}
 ⏰ *Time:* ${campDetails.reportingTime}
 
-Kindly refer to your ANO for further details.
+Kindly contact your college ANO for further details.
 
 Best Regards,
 NCC ERP System

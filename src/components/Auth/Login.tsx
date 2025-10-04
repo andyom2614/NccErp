@@ -25,18 +25,76 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center p-4">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-4">
+      {/* Background with NCC Cadets Photo */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `linear-gradient(rgba(30, 58, 138, 0.7), rgba(21, 94, 117, 0.7)), url('/images/backgrounds/ncc-cadets-1.jpg')`
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+      </div>
+
+      {/* Top Left Logos */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+        className="absolute top-4 left-4 z-10 flex items-center gap-4"
+      >
+        {/* NCC Logo */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 shadow-lg"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 flex items-center justify-center bg-blue-50 rounded-lg p-1">
+              <img 
+                src="/images/logos/ncc-logo.png" 
+                alt="NCC Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <div className="text-blue-600 font-bold text-sm">National Cadet Corps</div>
+              <div className="text-gray-600 text-xs">राष्ट्रीय कैडेट कोर</div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Digital India Logo */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg p-3 shadow-lg"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 flex items-center justify-center bg-orange-50 rounded-lg p-1">
+              <img 
+                src="/images/logos/digital-india-logo.png" 
+                alt="Digital India Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div>
+              <div className="text-orange-600 font-bold text-sm">Digital</div>
+              <div className="text-gray-600 text-xs">India</div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-20"
       >
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-8"
+          className="bg-white bg-opacity-95 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white border-opacity-20"
         >
           <div className="text-center mb-8">
             <motion.div
@@ -45,12 +103,17 @@ export const Login = () => {
               transition={{ type: 'spring', stiffness: 200 }}
               className="inline-block"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto">
-                <span className="text-white text-2xl font-bold">NCC</span>
+              <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg border-4 border-blue-600 p-2">
+                <img 
+                  src="/images/logos/ncc-logo.png" 
+                  alt="NCC Emblem" 
+                  className="w-full h-full object-contain"
+                />
               </div>
             </motion.div>
             <h1 className="text-3xl font-bold text-gray-900">NCC ERP System</h1>
-            <p className="text-gray-600 mt-2">Communication & Documentation Hub</p>
+            <p className="text-gray-600 mt-2">National Cadet Corps </p>
+            <p className="text-gray-500 text-sm mt-1">Unity & Discipline </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -137,6 +200,21 @@ export const Login = () => {
             Contact your administrator for account access
           </motion.p>
         </motion.div>
+      </motion.div>
+
+      {/* Bottom Right Badge */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+        className="absolute bottom-4 right-4 z-10"
+      >
+        <div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg">
+          <div className="text-center">
+            <div className="text-blue-600 font-bold text-sm">राष्ट्रीय कैडेट कोर</div>
+            <div className="text-gray-600 text-xs">National Cadet Corps</div>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

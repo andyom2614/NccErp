@@ -4,6 +4,7 @@ import { Users, Plus, Send, Calendar, MapPin, AlertTriangle, CheckCircle, X } fr
 import { collection, getDocs, query, where, addDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { useAuth } from '../../contexts/AuthContext';
+import { sendWhatsAppMessage } from '../../services/whatsappService';
 
 interface CampNotification {
   id: string;
@@ -166,6 +167,7 @@ export const SubmitCadets = () => {
         campId: selectedCamp.id,
         campTitle: selectedCamp.title,
         collegeId: anoCollege?.id || '',
+        collegeName: anoCollege?.name || '',
         anoId: user?.uid || '',
         cadets: selectedCadets.map(cadet => ({
           name: cadet.name,
@@ -177,11 +179,15 @@ export const SubmitCadets = () => {
         status: 'pending'
       };
 
+      // Save to Firestore
       await addDoc(collection(db, 'cadetSubmissions'), submission);
+      
+      // Send WhatsApp messages to cadets
+      await sendWhatsAppNotificationsToCadets();
       
       setMessage({ 
         type: 'success', 
-        text: `Successfully submitted ${selectedCadets.length} cadets for ${selectedCamp.title}` 
+        text: `Successfully submitted ${selectedCadets.length} cadets for ${selectedCamp.title}. WhatsApp notifications sent!` 
       });
       setSelectedCadets([]);
       setSelectedCamp(null);
@@ -191,6 +197,49 @@ export const SubmitCadets = () => {
       setMessage({ type: 'error', text: 'Failed to submit cadets. Please try again.' });
     } finally {
       setSubmitLoading(false);
+    }
+  };
+
+  const sendWhatsAppNotificationsToCadets = async () => {
+    try {
+      const whatsappService = await import('../../services/whatsappService');
+      
+      for (const cadet of selectedCadets) {
+        let phoneNumber = cadet.whatsappNumber;
+        
+        // Ensure phone number has +91 prefix
+        if (!phoneNumber.startsWith('+91')) {
+          phoneNumber = `+91${phoneNumber}`;
+        }
+        
+        // Clean the phone number (remove any spaces, dashes, etc.)
+        phoneNumber = phoneNumber.replace(/[\s-()]/g, '');
+        
+        const message = `🎖️ *NCC Camp Nomination*
+
+Dear ${cadet.rank} ${cadet.name},
+
+Congratulations! You have been *nominated by your ANO* for the following camp at *Institute Level*:
+
+📋 *Camp Details:*
+🏕️ Camp: ${selectedCamp?.title}
+📅 Dates: ${selectedCamp?.dates}
+📍 Location: ${selectedCamp?.location}
+🏫 College: ${anoCollege?.name}
+
+This is an excellent opportunity to represent your college at the institute level. Please prepare accordingly and await further instructions from your ANO.
+
+Best of luck! 🇮🇳
+
+*National Cadet Corps*
+*${anoCollege?.name}*`;
+
+        await whatsappService.sendWhatsAppMessage(phoneNumber, message);
+        console.log(`WhatsApp message sent to ${cadet.name} at ${phoneNumber}`);
+      }
+    } catch (error) {
+      console.error('Error sending WhatsApp messages to cadets:', error);
+      // Don't throw error here as the main submission should still succeed
     }
   };
 

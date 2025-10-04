@@ -27,7 +27,11 @@ interface User {
   role: 'ano' | 'clerk' | 'co';
 }
 
-export const ClerkCODashboard = () => {
+interface ClerkCODashboardProps {
+  onNavigate?: (page: string) => void;
+}
+
+export const ClerkCODashboard = ({ onNavigate }: ClerkCODashboardProps = {}) => {
   const { user } = useAuth();
   const [colleges, setColleges] = useState<College[]>([]);
   const [unit, setUnit] = useState<Unit | null>(null);
@@ -167,7 +171,7 @@ export const ClerkCODashboard = () => {
         <p className="text-gray-600 mt-1">Review and finalize cadet selections</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -177,13 +181,13 @@ export const ClerkCODashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -4, scale: 1.02 }}
-              className="bg-white rounded-xl shadow-md p-6 border border-gray-100"
+              className="bg-white rounded-xl shadow-md p-4 sm:p-6 border border-gray-100"
             >
-              <div className={`bg-gradient-to-br ${stat.color} p-3 rounded-lg inline-block mb-4`}>
-                <Icon className="text-white" size={24} />
+              <div className={`bg-gradient-to-br ${stat.color} p-2 sm:p-3 rounded-lg inline-block mb-3 sm:mb-4`}>
+                <Icon className="text-white" size={20} />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
-              <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{stat.value}</h3>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">{stat.label}</p>
             </motion.div>
           );
         })}
@@ -283,6 +287,7 @@ export const ClerkCODashboard = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => onNavigate && onNavigate('review')}
             className="w-full bg-orange-600 text-white py-3 rounded-lg font-medium hover:bg-orange-700 transition-colors"
           >
             Start Review
@@ -316,16 +321,17 @@ export const ClerkCODashboard = () => {
           className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-200"
         >
           <Download className="text-blue-600 mb-4" size={32} />
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Generate Reports</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Finalized Selections</h3>
           <p className="text-sm text-gray-700 mb-4">
-            Download selection reports as PDF
+            View and manage finalized selections
           </p>
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => onNavigate && onNavigate('finalize')}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
-            Download PDF
+            View Finalized List
           </motion.button>
         </motion.div>
       </div>

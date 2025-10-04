@@ -17,6 +17,8 @@ import { CampVacancies } from './components/Dashboard/CampVacancies';
 import { SubmitCadets } from './components/Dashboard/SubmitCadets';
 import { UploadDocuments } from './components/Dashboard/UploadDocuments';
 import { TrackStatus } from './components/Dashboard/TrackStatus';
+import { CadetSelectionReview } from './components/Dashboard/CadetSelectionReview';
+import { FinalizedSelections } from './components/Dashboard/FinalizedSelections';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -52,7 +54,7 @@ const DashboardContent = () => {
         return <ANODashboard />;
       case 'clerk':
       case 'co':
-        return <ClerkCODashboard />;
+        return <ClerkCODashboard onNavigate={setCurrentPage} />;
       default:
         return <AdminDashboard />;
     }
@@ -106,6 +108,15 @@ const DashboardContent = () => {
 
     if (currentPage === 'status' && userData?.role === 'ano') {
       return <TrackStatus />;
+    }
+
+    // Clerk/CO specific pages
+    if (currentPage === 'review' && (userData?.role === 'clerk' || userData?.role === 'co')) {
+      return <CadetSelectionReview />;
+    }
+
+    if (currentPage === 'finalize' && (userData?.role === 'clerk' || userData?.role === 'co')) {
+      return <FinalizedSelections />;
     }
 
     return (
